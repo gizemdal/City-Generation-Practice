@@ -12,8 +12,9 @@ As my base code, I used my terrain shader from HW1 (Noisy Terrain Generation) an
 ## Project Goal
 For this project, I aimed to generate a 3D procedural city with a mixture of "modern" and "dark" themes. The modern theme can be seen through the texture and style of the buildings while the dark theme is more focused on the color choices for the terrain, procedural sky and the "lava" water.
 
-View of the city without terrain
-![](progress_imgs/cityview.png)
+View of the city without terrain:
+
+![](process_imgs/cityview.png)
 
 ## Features and Techniques
 
@@ -57,23 +58,23 @@ As I stated on my Piazza posts https://piazza.com/class/jr11vjieq8t6om?cid=155 a
 
 Sneak Peek to an Early Step:
 
-![](progress_imgs/early.png)
+![](process_imgs/early.png)
 
 Rastered grids:
 
-![](progress_imgs/raster_ex.png)
+![](process_imgs/raster_ex.png)
 
 Closer view:
 
-![](progress_imgs/closerview.png) ![](progress_imgs/buildings.png)
+![](process_imgs/closerview.png) ![](process_imgs/buildings.png)
 
 Far view:
 
-![](progress_imgs/farview.png)
+![](process_imgs/farview.png)
 
 Terrain Maps:
 
-![](progress_imgs/terrain1.png) ![](progress_imgs/terrainpop.png)
+![](process_imgs/terrain1.png) ![](process_imgs/terrainpop.png)
 
-![](progress_imgs/terrainter.png) ![](progress_imgs/terrainboth.png)
+![](process_imgs/terrainter.png) ![](process_imgs/terrainboth.png)
 
