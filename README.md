@@ -1,45 +1,79 @@
 # Homework 6: City Generation
 
-For this assignment, you will generate a collection of 3D buildings within the road networks you created for the previous assignment.
+Name: Gizem Dal
 
-For this assignment, you will generate a network of roads to form the basis of a city using a modified version of L-systems. As in homework 4, you will be using instanced rendering to draw your road networks.
+Pennkey: gizemdal
 
-## Provided Resources
-You can use any base code for this assignment, so we haven't provided
-anything specific for you. We have included the paper [Real-time Procedural Generation of 'Pseudo Infinite' Cities](procedural_infinite_cities.pdf) for your reference. For visual inspiration, you might refer to Emily's [City Forgery](http://www.emilyhvo.com/city-forgery/) project.
+Live demo: https://gizemdal.github.io/hw06-city-generation/
 
-## Assignment Requirements
-- __(5 points)__ Based on the code you wrote for the previous assignment, create a 3D model of your terrain. You might consider using the subdivided plane we provided with homework 1. Since the road generation assignment was entirely 2D, your terrain need not have changes in elevation, since that would alter the placement of roads and buildings. The only elevation changes we require are having the water exist at a lower elevation than the land, with a small slope between the two.
+## Resources
+As my base code, I used my terrain shader from HW1 (Noisy Terrain Generation) and HW5 (Procedural Roads). Aside from the provided resources for this assignment, I referenced The Book of Shaders (https://thebookofshaders.com) and Iniqo Quilez's blog for my background sky texture, the lava water simulation and other implementations of noise functions. I used the free obj files for my building generation from the following website: https://people.sc.fsu.edu/~jburkardt/data/obj/. The paper "Real-time Procedural Generation of 'Pseudo Infinite' Cities" was very helpful in understanding how the procedural buildings can be generated.
 
-- __(5 points)__ Using whatever visual representation you wish, draw your roads on top of your terrain model. For the simplest representation, use instanced rendering to draw rectangular prisms slightly above the ground.
-- __(10 points)__ On the CPU, create a high-resolution 2D grid that spans your entire scene. "Rasterize" every road in this grid with an adjustable line thickness to demarcate areas where buildings cannot be placed. Do the same with any water in your terrain. This grid will be used in the next section to determine valid locations for buildings.
-- __(10 points)__ Generate a collection of randomly scattered 2D points in your building placement validity grid, removing any points that fall within cells already occupied by roads or water. At each of these points, you will place a building generated based on the specifications in the next section.
-- __(20 points)__ To create building geometry, you will follow the method illustrated in figure 3 of [Real-time Procedural Generation of 'Pseudo Infinite' Cities](procedural_infinite_cities.pdf). Beginning at a predetermined top height, generate some n-sided polygon and extrude it downward a certain distance. After creating this first layer, create an additional layer beneath it that has the form of two polygons combined together and extruded downward. Repeat until your building has reached the ground. You will be creating the structure of these buildings as VBO data on the CPU.
-- __(25 points)__ Once you have the basics of building generation working, you will need to refine your algorithm to create art-directed procedural buildings. Your city should contain buildings that follow these guidelines:
-  - Buildings in your city should not be uniform in appearance. The higher the city's population density, the more the buildings should resemble skyscrapers. In areas of lower density, the buildings should be shorter and look more residential. Think office buildings versus row homes. Areas of medium population should contain buildings that are of medium height and which look more like multi-story offices or shops. Don't feel constrained by the building generation algorithm from the previous section; add slanted roofs and other features to your buildings if you wish.
-  - The texturing of your buildings should be procedurally generated within a shader. Use all of the techniques you practiced in the first three homework assignments to polish your buildings' appearances. The overall aesthetic of your city is up to you (e.g. cyberpunk versus modern versus renaissance) but the procedural texturing should look intentional. Include windows, doors, lights, and other details you deem necessary to make your buildings look natural.
-- __(10 points)__ Make use of artistic lighting as we discussed during the environmental setpiece assignment. You should include several directional lights, as discussed in [IQ's article on artistic lighting](http://iquilezles.org/www/articles/outdoorslighting/outdoorslighting.htm), to ensure your scene has adequate illumination. There should never be any purely black shadows in your scene.
-- __(5 points)__ Your scene should include a procedural sky background as so many of your other assignments have. Make sure it is congruent with your lighting setup and the aesthetics of your city.
-- __(10 points)__ Following the specifications listed
-[here](https://github.com/pjcozzi/Articles/blob/master/CIS565/GitHubRepo/README.md),
-create your own README.md, renaming the file you are presently reading to
-INSTRUCTIONS.md. Don't worry about discussing runtime optimization for this
-project. Make sure your README contains the following information:
-    - Your name and PennKey
-    - Citation of any external resources you found helpful when implementing this
-    assignment.
-    - A link to your live github.io demo (refer to the pinned Piazza post on
-      how to make a live demo through github.io)
-    - An explanation of the techniques you used to generate your L-System features.
-    Please be as detailed as you can; not only will this help you explain your work
-    to recruiters, but it helps us understand your project when we grade it!
+## Project Goal
+For this project, I aimed to generate a 3D procedural city with a mixture of "modern" and "dark" themes. The modern theme can be seen through the texture and style of the buildings while the dark theme is more focused on the color choices for the terrain, procedural sky and the "lava" water.
 
+View of the city without terrain
+![](progress_imgs/cityview.png)
 
-## Extra Credit (Up to 20 points)
-- If you did not do so for the previous assignment, implement additional road layouts as described in Procedural Modeling of Cities
-  - Radial road networking: The main roads follow radial tracks around some predefined centerpoint
-  - Elevation road networking: Roads follow paths of least elevation change
-- Use shape grammars to further refine the structure of your buildings
-- Create fully 3D terrain and adjust the placement of your buildings and roads based on the slope of your terrain.
-- In the vein of Emily's procedural city, use the BioCrowds algorithm to create agents that seek some goal point by navigating the terrain covered by roads. 
-- Add any polish features you'd like to make your visual output more interesting
+## Features and Techniques
+
+# 3D Terrain
+
+I refactored my 2D procedural terrain code from HW5 to turn it into a 3D terrain where the water level is drawn lower than the land. I used my shore() function from the 2D terrain generation, where I determine the coast line for my terrain and divide the land from water using the sin() function with different amplitudes and frequencies depending on the depth. The transition from land to water happens more smoothly compared to 2D terrain due to the slope at the area in-between these two types of land.
+
+# Procedural Roads
+
+I generated my road network similar to the technique I implemented for HW5 where I used L-Systems to define expansion rules for my roads and rendered them by using an instanced shader. For this assignment, I altered my implementation such that the roads expand with 90 degrees from the course and the grid divisions with more narrow streets happen after the highways are generated. The roads are drawn slightly above the ground to be recognized.
+
+# 2D Raster Grid
+
+In order to determine where I could place my procedurally generated grids, I divided my terrain into smaller grids and created a 2D rasterization boolean grid where I store the occupation state of each grid coordinate. After I genereate all the roads and subdivisions, I rasterize every road in my scene into this 2D array. In order to handle approximations and very close coordinates, I rasterize my roads by giving them widths that are larger than their original width to ensure that the buildings don't fall on the roads. Besides the roads, the water areas are also marked as "occupied" in this 2D grid since buildings cannot be spawned on water.
+
+# Procedurally Generated Buildings and Their Placement
+
+From my 2D rasterization grid, I select 100 potential coordinates (I picked this number arbitrarily as the number of buildings I want to generate in my scene) for my buildings randomly, confirming that these are valid, "non-occupied" coordinates before I assign them. After the coordinates are set, I generate my buildings by using my population density map and multiple mesh object files. I first check how dense the population is at the selected coordinate for my building, which will determine the height. My implementation ensures that the buildings spawned in more populated areas have greater heights compared to lower population density areas. If the population density at the given area falls above a certain (hardcoded) threshold, I start-off my building with the "skyscraper" mesh on top and then extrude towards the bottom with randomly picked polygonal meshes until I reach the ground. This process is pretty much the same for buildings at less dense areas except that they don't start-off with the skyscraper mesh. The intermediate meshes (hexagonal prism, pentagonal prism and cube) are selected randomly. The structure of these buildings are created on the CPU as VBO data and rendered by using the instanced shader.
+
+# Building Texture
+
+In order to make my buildings look more modern, I used a square wave noise function to generate black and white stripes to show contrast. I also included gray segments on the buildings to represent the windows.
+
+# Lighting
+
+I included three sources of light in my scene to ensure that my scene doesn't contain any purely black shadows. I implemented lambertian shading with a touch of blinn phong by including specular intensity in my final light color.
+
+# Procedural Sky
+
+I implemented a red procedural sky by referencing The Book of Shaders to represent my background, and go along with the terrain and water color choices.
+
+# Other Features
+
+I included a Controls Panel on the right where the user can decide the number of iterations the road L-System should go through, the L-System axiom to generate more interesting roads ('F' for roads moving forward and branching out as smaller streets, 'R' for branching out highways). I also included the option for viewing the population density and terrain maps either separately or together on the screen.
+
+# Challenges and Difficulties
+
+As I stated on my Piazza posts https://piazza.com/class/jr11vjieq8t6om?cid=155 and https://piazza.com/class/jr11vjieq8t6om?cid=150, I had trouble with displaying my roads and buildings rendered by the instanced shader at the same time as my terrain and background that use different shader programs. That is why the code I'm submitting will only display the roads and procedural buildings. In order to disable the instanced shader and view the terrain and background, comment out the part in tick() inside main.ts where I use instanced shader to render building meshes and my roads.
+
+# Screenshots from the Project
+
+Sneak Peek to an Early Step:
+
+![](progress_imgs/early.png)
+
+Rastered grids:
+
+![](progress_imgs/raster_ex.png)
+
+Closer view:
+
+![](progress_imgs/closerview.png) ![](progress_imgs/buildings.png)
+
+Far view:
+
+![](progress_imgs/farview.png)
+
+Terrain Maps:
+
+![](progress_imgs/terrain1.png) ![](progress_imgs/terrainpop.png)
+
+![](progress_imgs/terrainter.png) ![](progress_imgs/terrainboth.png)
+
