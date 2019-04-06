@@ -4,7 +4,7 @@ Name: Gizem Dal
 
 Pennkey: gizemdal
 
-Live demo: https://gizemdal.github.io/hw06-city-generation/
+Live demo: https://gizemdal.github.io/hw06-city-generation/ (This was showing my HW5 code for some reason  when I submitted the assignment, hopefully it will get fixed by the time you view this!)
 
 ## Resources
 As my base code, I used my terrain shader from HW1 (Noisy Terrain Generation) and HW5 (Procedural Roads). Aside from the provided resources for this assignment, I referenced The Book of Shaders (https://thebookofshaders.com) and Iniqo Quilez's blog for my background sky texture, the lava water simulation and other implementations of noise functions. I used the free obj files for my building generation from the following website: https://people.sc.fsu.edu/~jburkardt/data/obj/. The paper "Real-time Procedural Generation of 'Pseudo Infinite' Cities" was very helpful in understanding how the procedural buildings can be generated.
